@@ -13,8 +13,7 @@ def version():
 
 setup(name="wutu",
         version=version(),
-        description="An utility library designed to create JavaScript out of
-      Python code",
+        description="An utility library designed to create JavaScript out of Python code",
         author="Šarūnas Navickas",
         author_email="zaibacu@gmail.com",
         url="https://github.com/zaibacu/wutu-compiler",
