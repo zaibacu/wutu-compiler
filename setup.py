@@ -1,7 +1,7 @@
 from setuptools import setup
 from pip.req import parse_requirements
 import sys, os
-sys.path.append("wutu-compiler/")
+sys.path.append("wutu_compiler/")
 
 install_reqs = list(parse_requirements("requirements.txt", session={}))
 
@@ -18,7 +18,7 @@ setup(name="wutu",
         author_email="zaibacu@gmail.com",
         url="https://github.com/zaibacu/wutu-compiler",
         license="MIT",
-        packages=["wutu-compiler"],
+        packages=["wutu_compiler"],
         install_requires=[str(ir.req) for ir in install_reqs],
         test_suite="nose.collector",
         tests_require=["nose"])

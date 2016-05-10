@@ -1,5 +1,5 @@
 from jinja2 import Environment, PackageLoader
-env = Environment(loader=PackageLoader("wutu-compiler", "snippets"))
+env = Environment(loader=PackageLoader("wutu_compiler", "snippets"))
 
 
 class Compiled(object):

@@ -5,8 +5,8 @@ def create_controller_js(stream, module):
     :param module:
     :return:
     """
-    from wutu.util import get_implemented_methods
-    from wutu.compiler.grammar import Provider, Function, SimpleDeclare
+    from wutu_compiler.utils import get_implemented_methods
+    from wutu_compiler.core.grammar import Provider, Function, SimpleDeclare
     stream.write("wutu.controller('{0}Controller', ".format(module.__class__.__name__))
     service = Provider("{0}Service".format(module.__class__.__name__))
     scope = Provider("$scope")

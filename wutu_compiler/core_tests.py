@@ -1,9 +1,9 @@
 import unittest
-#from wutu-test_util import *
-from wutu-compiler.core.common import *
-from wutu-compiler.core.controller import *
-from wutu-compiler.core.snippet import *
-#from wutu.util import *
+from util.test import *
+from core.common import *
+from core.controller import *
+from core.snippet import *
+from util import *
 
 
 class CompilerTests(unittest.TestCase):
@@ -43,21 +43,21 @@ class CompilerTests(unittest.TestCase):
 
 class GrammarTests(unittest.TestCase):
     def test_string(self):
-        from wutu-compiler.core.grammar import String
+        from core.grammar import String
         str = String("test")
         self.assertEqual("\"test\"", str.compile())
 
     def test_number(self):
-        from wutu-compiler.core.grammar import Number
+        from core.grammar import Number
         num = Number(42)
         self.assertEqual("42", num.compile())
 
     def test_simple_declaration(self):
-        from wutu-compiler.core.grammar import String, SimpleDeclare, Expression
+        from core.grammar import String, SimpleDeclare, Expression
         self.assertEqual("var foo = \"bar\";", SimpleDeclare("foo", String("bar"), True).compile())
 
     def test_function(self):
-        from wutu-compiler.core.grammar import Function, String, SimpleDeclare, Expression
+        from core.grammar import Function, String, SimpleDeclare, Expression
         fun = Function(["name"], [SimpleDeclare("hello_str", String("Hello, "))], Expression("hello_str + \" \" + name"))
         expected = """
         function(name){
@@ -68,7 +68,7 @@ class GrammarTests(unittest.TestCase):
         compare(self.assertEqual, expected, fun.compile())
 
     def test_provider(self):
-        from wutu-compiler.core.grammar import Provider, String
+        from core.grammar import Provider, String
         http = Provider("$http")
         result = http.get(String("http://google.com").compile())
         expected = "$http.get(\"http://google.com\")"
@@ -77,7 +77,7 @@ class GrammarTests(unittest.TestCase):
         self.assertEqual(["$http.url = my_url_generator();"], http.assignments)
 
     def test_promise(self):
-        from wutu-compiler.core.grammar import Provider, Function, SimpleDeclare, String, Expression
+        from core.grammar import Provider, Function, SimpleDeclare, String, Expression
         http = Provider("$http")
         result = http.get(String("http://google.com").compile()).resolve(Function(["result"],
                                                                 body=[SimpleDeclare("$scope.test", Expression("result.data"))]))
@@ -89,7 +89,7 @@ class GrammarTests(unittest.TestCase):
         compare(self.assertEqual, expected, result)
 
     def test_object(self):
-        from wutu-compiler.core.grammar import Object, String
+        from core.grammar import Object, String
         obj = Object()
         obj.add_member("something", String("test"))
         result = obj.compile()
@@ -97,7 +97,7 @@ class GrammarTests(unittest.TestCase):
         compare(self.assertEqual, expected, result)
 
     def test_unwrap(self):
-        from wutu-compiler.core.grammar import Function, Promise, Provider, String, unwraps
+        from core.grammar import Function, Promise, Provider, String, unwraps
         http = Provider("$http")
         promise = http.get(String("http://google.com").compile())
         result = Function([], *unwraps(promise)).compile()
