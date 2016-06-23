@@ -21,4 +21,4 @@ setup(name="wutu",
         packages=["wutu_compiler"],
         install_requires=[str(ir.req) for ir in install_reqs],
         tests_require=["pytest"],
-        setup_require=["pytest-runner"])
+        setup_requires=["pytest-runner"])
