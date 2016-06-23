@@ -20,5 +20,5 @@ setup(name="wutu",
         license="MIT",
         packages=["wutu_compiler"],
         install_requires=[str(ir.req) for ir in install_reqs],
-        test_suite="nose.collector",
-        tests_require=["nose"])
+        tests_require=["pytest"],
+        setup_require=["pytest-runner"])
