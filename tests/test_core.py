@@ -1,12 +1,11 @@
-import unittest
-from util.test import *
-from core.common import *
-from core.controller import *
-from core.snippet import *
-from util import *
+from wutu_compiler.util.test import *
+from wutu_compiler.core.common import *
+from wutu_compiler.core.controller import *
+from wutu_compiler.core.snippet import *
+from wutu_compiler.util import *
 
 
-class CompilerTests(unittest.TestCase):
+class CompilerTests(object):
 
     def test_service(self):
         mod = Module()
@@ -23,14 +22,14 @@ class CompilerTests(unittest.TestCase):
         add_variable(stream, "test", "hello")
         result = get_data(stream).strip()
         excepted = "var test = \"hello\";"
-        self.assertEqual(excepted, result)
+        assert excepted == result
 
     def test_int_argument(self):
         stream = create_stream()
         add_variable(stream, "test", 123)
         result = get_data(stream).strip()
         excepted = "var test = 123;"
-        self.assertEqual(excepted, result)
+        assert excepted == result
 
     def test_module(self):
         mod = Module()
@@ -38,23 +37,24 @@ class CompilerTests(unittest.TestCase):
         stream = StringIO()
         create_base(stream)
         mod.create_service(stream)
-        self.assertTrue(validate_js(get_data(stream)))
+        assert validate_js(get_data(stream))
 
 
-class GrammarTests(unittest.TestCase):
+class GrammarTests(object):
+
     def test_string(self):
         from core.grammar import String
         str = String("test")
-        self.assertEqual("\"test\"", str.compile())
+        assert "\"test\"" == str.compile()
 
     def test_number(self):
         from core.grammar import Number
         num = Number(42)
-        self.assertEqual("42", num.compile())
+        assert "42" == num.compile()
 
     def test_simple_declaration(self):
         from core.grammar import String, SimpleDeclare, Expression
-        self.assertEqual("var foo = \"bar\";", SimpleDeclare("foo", String("bar"), True).compile())
+        assert "var foo = \"bar\";" == SimpleDeclare("foo", String("bar"), True).compile()
 
     def test_function(self):
         from core.grammar import Function, String, SimpleDeclare, Expression
@@ -65,16 +65,16 @@ class GrammarTests(unittest.TestCase):
             return hello_str + " " + name;
         }
         """
-        compare(self.assertEqual, expected, fun.compile())
+        assert expected == fun.compile()
 
     def test_provider(self):
         from core.grammar import Provider, String
         http = Provider("$http")
         result = http.get(String("http://google.com").compile())
         expected = "$http.get(\"http://google.com\")"
-        self.assertEqual(expected, result)
+        assert expected == result
         http.url = "my_url_generator()"
-        self.assertEqual(["$http.url = my_url_generator();"], http.assignments)
+        assert ["$http.url = my_url_generator();"] == http.assignments
 
     def test_promise(self):
         from core.grammar import Provider, Function, SimpleDeclare, String, Expression
@@ -86,7 +86,7 @@ class GrammarTests(unittest.TestCase):
             $scope.test = result.data;
         });
         """
-        compare(self.assertEqual, expected, result)
+        assert expected == result
 
     def test_object(self):
         from core.grammar import Object, String
@@ -94,7 +94,7 @@ class GrammarTests(unittest.TestCase):
         obj.add_member("something", String("test"))
         result = obj.compile()
         expected = "{ \"something\": \"test\" }"
-        compare(self.assertEqual, expected, result)
+        assert expected == result
 
     def test_unwrap(self):
         from core.grammar import Function, Promise, Provider, String, unwraps
@@ -120,26 +120,26 @@ class GrammarTests(unittest.TestCase):
             return result;
         }
         """
+        assert expected == result
 
-        compare(self.assertEqual, expected, result)
 
+class SnippetsTests(object):
 
-class SnippetsTests(unittest.TestCase):
     def test_local_variable(self):
         expected = "var foo = \"bar\";"
         result = compile_snippet("variable.html", local=True, name="foo", value="bar")
-        self.assertEqual(expected, str(result))
+        assert expected == str(result)
 
     def test_local_variable_without_assign(self):
         expected = "var test;"
         result = compile_snippet("variable.html", local=True, name="test")
-        self.assertEqual(expected, str(result))
+        assert expected == str(result)
 
     def test_fn_as_variable(self):
         expected = "helloMsg = alert(\"Hello, world!\");"
         fn_snippet = compile_snippet("function_call.html", name="alert", params=["\"Hello, world!\""])
         result = compile_snippet("variable.html", name="helloMsg", value=fn_snippet)
-        self.assertEqual(expected, str(result))
+        assert expected == str(result)
 
     def test_fn_block(self):
         expected = """
@@ -158,4 +158,4 @@ class SnippetsTests(unittest.TestCase):
                                  params=["name"],
                                  content=fn_block)
 
-        compare(self.assertEqual, expected, str(result))
+        assert expected == str(result)
