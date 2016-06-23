@@ -1,8 +1,8 @@
-from wutu_compiler.util.test import *
+from wutu_compiler.utils.test import *
 from wutu_compiler.core.common import *
 from wutu_compiler.core.controller import *
 from wutu_compiler.core.snippet import *
-from wutu_compiler.util import *
+from wutu_compiler.utils.common import *
 
 
 class CompilerTests(object):
